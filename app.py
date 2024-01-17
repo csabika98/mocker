@@ -39,12 +39,22 @@ def index():
     return render_template('index.html')
 
 
-latest_response_id = 1
+def fetch_latest_response_id():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute('SELECT MAX(id) FROM responses')
+    latest_id = cursor.fetchone()[0]
+    print(latest_id)
+    conn.close()
+    return latest_id if latest_id is not None else 0
+
+
+latest_response_id = fetch_latest_response_id()  # or initialize it with the appropriate value
 
 
 @app.route('/api', methods=['POST'])
 def api():
-    global response_code, content_type, latest_response_id
+    global response_code, content_type
 
     request_type = request.form['request_type']
     request_content = request.form['request_data']
@@ -63,10 +73,9 @@ def api():
         except Exception as e:
             return jsonify(error=f"Invalid XML request: {str(e)}"), 400
 
+    latest_response_id = fetch_latest_response_id()
 
-    latest_response_id += 1
-    ##return redirect(url_for('get_response'))
-    return jsonify(message='Request received successfully', latest_response_id=latest_response_id)
+    return jsonify(message='Request received successfully', latest_response_id=fetch_latest_response_id())
 
 
 def save_response_to_db(data, content_type, response_code):
@@ -106,7 +115,7 @@ def fetch_response_from_db(response_id):
 @app.route('/get_latest_response_id', methods=['GET'])
 def get_latest_response_id():
     global latest_response_id
-    return jsonify(latest_response_id=latest_response_id)
+    return jsonify(latest_response_id=fetch_latest_response_id())
 
 
 def run_server():
