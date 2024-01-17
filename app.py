@@ -6,7 +6,7 @@ import sqlite3
 
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Set a secret key for sessions
+
 
 # SQLite3 database setup
 DATABASE = 'responses.db'
