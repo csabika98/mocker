@@ -32,7 +32,7 @@ create_table()
 # Variables for storing response data
 response_data = {}
 response_code = 200
-content_type = 'application/json'
+
 
 @app.route('/')
 def index():
@@ -69,13 +69,16 @@ def api():
     elif request_type == 'XML':
         try:
             xml_request = ET.fromstring(request_content)
-            save_response_to_db(request_content, 'application/xml', response_code)
+            # Convert the XML content to a string before saving
+            xml_string = ET.tostring(xml_request, encoding='utf-8').decode('utf-8')
+            save_response_to_db(xml_string, 'application/xml', response_code)
         except Exception as e:
             return jsonify(error=f"Invalid XML request: {str(e)}"), 400
 
     latest_response_id = fetch_latest_response_id()
 
-    return jsonify(message='Request received successfully', latest_response_id=fetch_latest_response_id())
+    return jsonify(message='Request received successfully', latest_response_id=latest_response_id)
+
 
 
 def save_response_to_db(data, content_type, response_code):
