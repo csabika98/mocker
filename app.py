@@ -34,10 +34,6 @@ response_data = {}
 response_code = 200
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 
 def fetch_latest_response_id():
     conn = sqlite3.connect(DATABASE)
@@ -47,6 +43,12 @@ def fetch_latest_response_id():
     print(latest_id)
     conn.close()
     return latest_id if latest_id is not None else 0
+
+@app.route('/')
+def index():
+    latest_id = fetch_latest_response_id()
+    return render_template('index.html', latest_id=latest_id)
+
 
 
 latest_response_id = fetch_latest_response_id()  # or initialize it with the appropriate value
