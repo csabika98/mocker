@@ -9,6 +9,35 @@
         
 </head>
 <body class="container mt-4">
+    <div class="container">
+        <h1 class="mb-4">API Mockup Server</h1>
+        <p>
+            This lightweight Python application enables you to simulate APIs existing in PROD or other staging environments.
+            It can be used without even creating an API in Skye. Its usage is straightforward: you simply paste the desired response,
+            enter the response code (such as always returning HTTP 200, 201, or possibly 400), and define the Request Type.
+            Yes, it supports XML/JSON types as well.
+        </p>
+
+        <div class="mt-4">
+            <h5>Key Features:</h5>
+            <ul>
+                <li>Supports XML/JSON</li>
+                <li>Allows specifying the response code</li>
+                <li>Supports 'GET', 'POST', 'PUT', 'UPDATE', 'DELETE' methods</li>
+                <li>Easy to use and can be utilized for Skye; you just need to create an HTTP Invoker</li>
+                <li>Your response will be saved using SQLite3 (until I restart the server, or after 24 hours — Smile)</li>
+                <li>Automatic redirection to the API endpoint, supporting browser view</li>
+            </ul>
+        </div>
+
+        <p>
+            SSL certificate is installed, and it is built using Flask, Python, Waitress, and Bootstrap, Jinja2,
+            source code: <a href="https://github.com/csabika98/mocker" target="_blank">https://github.com/csabika98/mocker</a>
+        </p>
+    </div>
+
+
+<body class="container mt-4">
     <form id="mockupForm" method="POST" onsubmit="submitForm(event)">
         <div class="form-group">
             <label for="request_type">Request Type:</label>
