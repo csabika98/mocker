@@ -41,7 +41,6 @@
 
 
 
-
     <script>
         function submitForm(event) {
             event.preventDefault();  // Prevent the default form submission
@@ -64,12 +63,18 @@
                 }
             })
             .then(data => {
-                // Handle the response, e.g., update the link to view the response
-                getNextResponseId().then(latestId => {
-                    var viewResponseLink = document.getElementById('view_response_link');
-                    viewResponseLink.href = `/get_response?id=${latestId}`;
-                    window.location.href = `/get_response?id=${latestId}`;
-                });
+                // Check for errors in the response
+                if (data.error) {
+                    // Display the error message to the user
+                    alert('Error: ' + data.error);
+                } else {
+                    // Handle the response, e.g., update the link to view the response
+                    getNextResponseId().then(latestId => {
+                        var viewResponseLink = document.getElementById('view_response_link');
+                        viewResponseLink.href = `/get_response?id=${latestId}`;
+                        window.location.href = `/get_response?id=${latestId}`;
+                    });
+                }
             })
             .catch(error => console.error('Error:', error));
         }
@@ -85,8 +90,6 @@
         }
     </script>
     
-        
-        
         
 
     

@@ -54,10 +54,9 @@ def index():
 latest_response_id = fetch_latest_response_id()  # or initialize it with the appropriate value
 
 
+
 @app.route('/api', methods=['POST'])
 def api():
-    global response_code, content_type
-
     request_type = request.form['request_type']
     request_content = request.form['request_data']
     response_code = int(request.form['response_code'])
@@ -67,19 +66,18 @@ def api():
             json_request = json.loads(request_content)
             save_response_to_db(json_request, 'application/json', response_code)
         except json.JSONDecodeError as e:
-            return jsonify(error=f"Invalid JSON request: {str(e)}"), 400
+            return jsonify(error=f"Invalid JSON request: {str(e)}"), 400, {'Content-Type': 'application/json'}
     elif request_type == 'XML':
         try:
             xml_request = ET.fromstring(request_content)
-            # Convert the XML content to a string before saving
             xml_string = ET.tostring(xml_request, encoding='utf-8').decode('utf-8')
             save_response_to_db(xml_string, 'application/xml', response_code)
         except Exception as e:
-            return jsonify(error=f"Invalid XML request: {str(e)}"), 400
+            return jsonify(error=f"Invalid XML request: {str(e)}"), 400, {'Content-Type': 'application/json'}
 
     latest_response_id = fetch_latest_response_id()
 
-    return jsonify(message='Request received successfully', latest_response_id=latest_response_id)
+    return jsonify(message='Request received successfully', latest_response_id=latest_response_id), 200, {'Content-Type': 'application/json'}
 
 
 
